@@ -79,6 +79,6 @@ func Ch4() {
 
     // аштфд part here
 
-    fmt.Println("[main] sum of square and cube of", testNum, " is", sum)
+    // fmt.Println("[main] sum of square and cube of", testNum, " is", sum)
     fmt.Println("[main] main() stopped")
 }
