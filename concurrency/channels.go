@@ -103,7 +103,7 @@ func Ch5_stricter_chan_type() {
 }
 
 /*
-  Сделать так, чтобы обрабатывалась только первая (самая быстрая) отправка из 2 горутин
+Сделать так, чтобы обрабатывалась только первая (самая быстрая) отправка из 2 горутин
 */
 func Ch6_read_from_several_chans() {
 	var start time.Time
@@ -134,10 +134,9 @@ func Ch6_read_from_several_chans() {
 	fmt.Println("main() stopped", time.Since(start).Milliseconds()%1000)
 }
 
-/* 
-	Сделать так, чтобы из селекта возвращалось значение по умолчанию по умолчанию, 
-	если в горутинах нет значения
-
+/*
+Сделать так, чтобы из селекта возвращалось значение по умолчанию по умолчанию,
+если в горутинах нет значения
 */
 func Ch7_read_from_several_chans() {
 	start := time.Now()
@@ -145,12 +144,12 @@ func Ch7_read_from_several_chans() {
 		time.Sleep(7 * time.Second)
 		c <- "Hello from service 1"
 	}
-	
+
 	service2 := func(c chan string) {
 		time.Sleep(2 * time.Second)
 		c <- "Hello from service 2"
 	}
-	
+
 	fmt.Println("main() started")
 
 	chan1 := make(chan string)
@@ -161,9 +160,44 @@ func Ch7_read_from_several_chans() {
 
 	select {
 	case res := <-chan1:
-		fmt.Println("Response from service 1", res, time.Since(start).Milliseconds() % 1000)
+		fmt.Println("Response from service 1", res, time.Since(start).Milliseconds()%1000)
 	case res := <-chan2:
-		fmt.Println("Response from service 2", res, time.Since(start).Milliseconds() % 1000)
+		fmt.Println("Response from service 2", res, time.Since(start).Milliseconds()%1000)
 	}
-	fmt.Println("main() stopped", time.Since(start).Milliseconds() % 1000)
+	fmt.Println("main() stopped", time.Since(start).Milliseconds()%1000)
+}
+
+/*
+Сделать так, чтобы если нет значения в каналах, то через 2 секунды выводилось сообщение "No response received after 2 seconds"
+*/
+func Ch8_wait_in_select_some_time_then_default() {
+	var start time.Time
+	start = time.Now()
+
+	service1 := func(c chan string) {
+		time.Sleep(3 * time.Second)
+		c <- "Hello from service 1"
+	}
+
+	service2 := func(c chan string) {
+		time.Sleep(5 * time.Second)
+		c <- "Hello from service 2"
+	}
+
+	fmt.Println("main() started", time.Since(start))
+
+	chan1 := make(chan string)
+	chan2 := make(chan string)
+
+	go service1(chan1)
+	go service2(chan2)
+
+	select {
+	case res := <-chan1:
+		fmt.Println("Response from service 1", res, time.Since(start))
+	case res := <-chan2:
+		fmt.Println("Response from service 2", res, time.Since(start))
+	}
+
+	fmt.Println("main() stopped", time.Since(start))
 }
