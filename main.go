@@ -17,6 +17,7 @@ var practiceItems = map[string]func(){
 	"ch2": concurrency.Ch2, "ch2a": concurrency.Ch2_answer,
 	"ch3": concurrency.Ch3, "ch3a": concurrency.Ch3_answer,
 	"ch4": concurrency.Ch4, "ch4a": concurrency.Ch4_answer,
+	"ch5": concurrency.Ch5_stricter_chan_type, "ch5a": concurrency.Ch5_stricter_chan_type_answer,
 	"err1": concurrency.Err1, "err1a": concurrency.Err1_answer,
 }
 

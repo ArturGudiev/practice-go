@@ -11,13 +11,13 @@ func Ch1() {
 	_ = ch
 }
 
-/* 
+/*
 Вывести все значения отправленные канал в главной горутине в цикле for
 Простой способ без range
 */
 func Ch2() {
 	c := make(chan int)
-	
+
 	squares := func(c chan int) {
 		for i := 0; i <= 9; i++ {
 			c <- i * i
@@ -28,22 +28,20 @@ func Ch2() {
 	go squares(c) // start goroutine
 }
 
-
 /* Вывести данные из закрытого канала в цикле */
 func Ch3() {
 	c := make(chan int, 3)
-    c <- 1
-    c <- 2
-    c <- 3
-    close(c)
+	c <- 1
+	c <- 2
+	c <- 3
+	close(c)
 }
 
-
 /**
-	в функциях square и cube посчитать значения, 
-	- затем отправить их обратно через тот же канал 
-	- в функции main получить оба значения и просуммировать
-	- вывести результат
+в функциях square и cube посчитать значения,
+- затем отправить их обратно через тот же канал
+- в функции main получить оба значения и просуммировать
+- вывести результат
 
 */
 
@@ -56,29 +54,48 @@ func Ch4() {
 		fmt.Println("[cube] reading")
 	}
 
-    fmt.Println(" started")
+	fmt.Println(" started")
 
-    squareChan := make(chan int)
-    cubeChan := make(chan int)
+	squareChan := make(chan int)
+	cubeChan := make(chan int)
 
-    go square(squareChan)
-    go cube(cubeChan)
+	go square(squareChan)
+	go cube(cubeChan)
 
-    testNum := 3
-    fmt.Println("[main] sent testNum to squareChan")
+	// testNum := 3
+	fmt.Println("[main] sent testNum to squareChan")
 
-    // square command
+	// square command
 
-    fmt.Println("[main] resuming")
-    fmt.Println("[main] sent testNum to cubeChan")
+	fmt.Println("[main] resuming")
+	fmt.Println("[main] sent testNum to cubeChan")
 
-    // cube command 
+	// cube command
 
-    fmt.Println("[main] resuming")
-    fmt.Println("[main] reading from channels")
+	fmt.Println("[main] resuming")
+	fmt.Println("[main] reading from channels")
 
-    // аштфд part here
+	// аштфд part here
 
-    // fmt.Println("[main] sum of square and cube of", testNum, " is", sum)
-    fmt.Println("[main] main() stopped")
+	// fmt.Println("[main] sum of square and cube of", testNum, " is", sum)
+	fmt.Println("[main] main() stopped")
+}
+
+/*
+  в функции green сделать ограничить канал, сделав его только для чтения  
+*/
+func Ch5_stricter_chan_type() {
+	greet := func(roc chan string) {
+		fmt.Println("Hello " + <-roc + "!")
+		roc <- "asd"
+	}
+	
+	fmt.Println("main() started")
+	c := make(chan string)
+	
+	go greet(c)
+	
+	c <- "John"
+	fmt.Println("main() stopped")
+	
 }

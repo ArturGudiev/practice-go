@@ -56,7 +56,6 @@ func Ch3_answer() {
 }
 
 func Ch4_answer() {
-
 	square := func(c chan int) {
 		fmt.Println("[square] reading")
 		num := <-c
@@ -95,4 +94,20 @@ func Ch4_answer() {
 
     fmt.Println("[main] sum of square and cube of", testNum, " is", sum)
     fmt.Println("[main] main() stopped")
+}
+
+
+func Ch5_stricter_chan_type_answer() {
+	greet := func(roc <-chan string) {
+		fmt.Println("Hello " + <-roc + "!")
+	}
+	
+	fmt.Println("main() started")
+	c := make(chan string)
+	
+	go greet(c)
+	
+	c <- "John"
+	fmt.Println("main() stopped")
+	
 }
