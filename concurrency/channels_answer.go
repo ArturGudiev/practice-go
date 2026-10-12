@@ -2,9 +2,8 @@ package concurrency
 
 import "fmt"
 
-
 func Ch1_answer() {
-	
+
 	ch := make(chan int)
 
 	go func() {
@@ -19,27 +18,9 @@ func Ch1_answer() {
 	}
 }
 
-
-// func Ch2_answer() {
-// 	ch := make(chan int)
-
-// 	go func() {
-// 		ch <- 111
-// 		ch <- 222
-// 		ch <- 333
-// 		close(ch)
-// 	}()
-
-// 	go func() {
-// 		item := <- ch
-// 		println(item)
-// 	}()
-
-// }
-
 func Ch2_answer() {
 	c := make(chan int)
-	
+
 	squares := func(c chan int) {
 		for i := 0; i <= 9; i++ {
 			c <- i * i
@@ -48,7 +29,7 @@ func Ch2_answer() {
 	}
 
 	go squares(c) // start goroutine
- 	for {
+	for {
 		val, ok := <-c
 		if ok == false {
 			fmt.Println(val, ok, "<-- loop broke!")
@@ -59,4 +40,17 @@ func Ch2_answer() {
 	}
 	fmt.Println("main() stopped")
 
+}
+
+func Ch3_answer() {
+	c := make(chan int, 3)
+    c <- 1
+    c <- 2
+    c <- 3
+    close(c)
+
+    // iteration terminates after receiving 3 values
+    for elem := range c {
+        fmt.Println(elem)
+    }
 }
