@@ -142,5 +142,35 @@ func Ch6_read_from_several_chans_answer() {
 	}
 
 	fmt.Println("main() stopped", time.Since(start).Milliseconds() % 1000)
+}
 
+func Ch7_read_from_several_chans_answer() {
+	start := time.Now()
+	service1 := func(c chan string) {
+		time.Sleep(7 * time.Second)
+		c <- "Hello from service 1"
+	}
+	
+	service2 := func(c chan string) {
+		time.Sleep(2 * time.Second)
+		c <- "Hello from service 2"
+	}
+	
+	fmt.Println("main() started")
+
+	chan1 := make(chan string)
+	chan2 := make(chan string)
+
+	go service1(chan1)
+	go service2(chan2)
+
+	select {
+	case res := <-chan1:
+		fmt.Println("Response from service 1", res, time.Since(start).Milliseconds() % 1000)
+	case res := <-chan2:
+		fmt.Println("Response from service 2", res, time.Since(start).Milliseconds() % 1000)
+	default:
+		fmt.Println("No response received", time.Since(start).Milliseconds() % 1000)
+	}
+	fmt.Println("main() stopped", time.Since(start).Milliseconds() % 1000)
 }
