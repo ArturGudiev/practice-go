@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	concurrency.F1()
+	concurrency.Ch1_answer()
 }
