@@ -1,0 +1,39 @@
+1) ===== 1
+
+calling goroutine for array of function arguments
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func process(val int) int {
+	return val * 2 // Какая-то полезная работа
+}
+
+func main() {
+	data := []int{1, 2, 3, 4, 5}
+	results := make([]int, len(data)) // Срез для результатов той же длины
+	
+	var wg sync.WaitGroup
+
+	for i, val := range data {
+		wg.Add(1) // Увеличиваем счетчик перед запуском горутины
+		
+		// Передаем i и val как аргументы, чтобы избежать замыкания переменных цикла
+		go func(index int, value int) {
+			defer wg.Done() // Уменьшаем счетчик, когда горутина завершится
+			results[index] = process(value) // Безопасная запись по индексу
+		}(i, val)
+	}
+
+	wg.Wait() // Ждем, пока все горутины отработают
+
+	fmt.Println(results) // Выведет: [2, 4, 6, 8, 10]
+
+}
+
+
+===== 2
