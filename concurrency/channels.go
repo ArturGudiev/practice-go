@@ -1,6 +1,9 @@
 package concurrency
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 /*
 В канал ch отправить 3 числа 111, 222, 333 и зкарыть канал в отдельной горутине
@@ -82,20 +85,53 @@ func Ch4() {
 }
 
 /*
-  в функции green сделать ограничить канал, сделав его только для чтения  
+в функции green сделать ограничить канал, сделав его только для чтения
 */
 func Ch5_stricter_chan_type() {
 	greet := func(roc chan string) {
 		fmt.Println("Hello " + <-roc + "!")
 		roc <- "asd"
 	}
-	
+
 	fmt.Println("main() started")
 	c := make(chan string)
-	
+
 	go greet(c)
-	
+
 	c <- "John"
 	fmt.Println("main() stopped")
-	
+}
+
+/*
+
+  Сделать так, чтобы обрабатывалась только первая (самая быстрая) отправка из 2 горутин
+*/
+
+func Ch6_read_from_several_chans() {
+	var start time.Time
+
+	service1 := func(c chan string) {
+		time.Sleep(7 * time.Second)
+		c <- "Hello from service 1"
+	}
+
+	service2 := func(c chan string) {
+		time.Sleep(1 * time.Second)
+		c <- "Hello from service 2"
+	}
+
+	fmt.Println("main() started", time.Since(start).Milliseconds()%1000)
+
+	chan1 := make(chan string)
+	chan2 := make(chan string)
+
+	go service1(chan1)
+	go service2(chan2)
+
+	res1 := <-chan1
+	fmt.Println("Response from service 1", res1, time.Since(start).Milliseconds()%1000)
+	res2 := <-chan2
+	fmt.Println("Response from service 2", res2, time.Since(start).Milliseconds()%1000)
+
+	fmt.Println("main() stopped", time.Since(start).Milliseconds()%1000)
 }
