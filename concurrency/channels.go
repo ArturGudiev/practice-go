@@ -11,6 +11,10 @@ func Ch1() {
 	_ = ch
 }
 
+/* 
+Вывести все значения отправленные канал в главной горутине в цикле for
+
+*/
 func Ch2() {
 	c := make(chan int)
 	
@@ -22,10 +26,4 @@ func Ch2() {
 	}
 
 	go squares(c) // start goroutine
- 	for {
-		val, ok := <-c
-		fmt.Println(val, ok)
-	}
-	fmt.Println("main() stopped")
-
 }

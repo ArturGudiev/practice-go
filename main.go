@@ -15,6 +15,7 @@ func Default() {
 var practiceItems = map[string]func(){
 	"ch1":   concurrency.Ch1,
 	"ch1a":  concurrency.Ch1_answer,
+	"ch2":  concurrency.Ch2,
 	"ch2a":  concurrency.Ch2_answer,
 	"err1":  concurrency.Err1,
 	"err1a": concurrency.Err1_answer,
