@@ -20,8 +20,9 @@ var practiceItems = map[string]func(){
 	"ch5": concurrency.Ch5_stricter_chan_type, "ch5a": concurrency.Ch5_stricter_chan_type_answer,
 	"ch6": concurrency.Ch6_read_from_several_chans, "ch6a": concurrency.Ch6_read_from_several_chans_answer,
 	"ch7": concurrency.Ch7_read_from_several_chans, "ch7a": concurrency.Ch7_read_from_several_chans_answer,
-	"ch8": concurrency.Ch8_wait_in_select_some_time_then_default,
-	"ch8a": concurrency.Ch8_wait_in_select_some_time_then_default_answer,
+	"ch8": concurrency.Ch8_wait_in_select_some_time_then_default, "ch8a": concurrency.Ch8_wait_in_select_some_time_then_default_answer,
+
+	"conc1": concurrency.Conc1_, "conc1a": concurrency.Conc1_answer,
 	"err1": concurrency.Err1, "err1a": concurrency.Err1_answer,
 }
 
