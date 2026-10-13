@@ -120,3 +120,20 @@ func Conc4() {
 
     fmt.Println("value of i after 1000 operations is", i)
 }
+
+
+/*
+Сделай генератор чисел фибоначчи
+*/
+func Conc5_fib() {
+	fib := func(length int) {
+		for i, j := 0, 1; i < length; i, j = i+j, i {
+			print(i)
+		}		
+	}
+	_ = fib
+
+    // for fn := range fib(10) {
+    //     fmt.Println("Current fibonacci number is", fn)
+    // }
+}

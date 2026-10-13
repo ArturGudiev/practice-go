@@ -126,3 +126,22 @@ func Conc4_answer() {
 
     fmt.Println("value of i after 1000 operations is", i)
 }
+
+func Conc5_fib_answer() {
+	fib := func(length int) <-chan int {
+		c := make(chan int)
+
+		go func() {
+			for i, j := 0, 1; i < length; i, j = i+j, i {
+				c <- i
+			}
+			close(c)
+		}()
+
+		return c
+	}
+
+    for fn := range fib(10) {
+        fmt.Println("Current fibonacci number is", fn)
+    }
+}

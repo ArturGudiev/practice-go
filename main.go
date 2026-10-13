@@ -31,6 +31,8 @@ var practiceItems = map[string]func(){
 	"conc4": concurrency.Conc4,
 	"conc4a": concurrency.Conc4_answer,
 
+	"conc5a": concurrency.Conc5_fib_answer,
+
 	"err1": concurrency.Err1, "err1a": concurrency.Err1_answer,
 }
 
