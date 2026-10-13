@@ -102,3 +102,27 @@ func Conc3_with_wg_answer() {
 	wg.Wait()
 	fmt.Println("[main] main() stopped")
 }
+
+
+func Conc4_answer() {
+	
+	i := 0
+	worker := func(wg *sync.WaitGroup, m *sync.Mutex) {
+		m.Lock()
+		i = i + 1
+		m.Unlock()
+		wg.Done()
+	}
+
+    var wg sync.WaitGroup
+	var m sync.Mutex
+
+    for i := 0; i < 1000; i++ {
+        wg.Add(1)
+        go worker(&wg, &m)
+    }
+
+    wg.Wait()
+
+    fmt.Println("value of i after 1000 operations is", i)
+}

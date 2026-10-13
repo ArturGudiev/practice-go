@@ -25,8 +25,11 @@ var practiceItems = map[string]func(){
 	"conc1": concurrency.Conc1_, "conc1a": concurrency.Conc1_answer,
 	"conc2": concurrency.Conc2_pull_workers_answer, "conc2a": concurrency.Conc2_pull_workers_answer,
 	
-	// "conc3": concurrency.Conc3_with_wg,
+	"conc3": concurrency.Conc3_with_wg,
 	"conc3a": concurrency.Conc3_with_wg_answer,
+
+	"conc4": concurrency.Conc4,
+	"conc4a": concurrency.Conc4_answer,
 
 	"err1": concurrency.Err1, "err1a": concurrency.Err1_answer,
 }

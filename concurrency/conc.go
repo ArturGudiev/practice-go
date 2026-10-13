@@ -2,6 +2,7 @@ package concurrency
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -96,4 +97,26 @@ func Conc3_with_wg() {
 	}
 
 	fmt.Println("[main] main() stopped")
+}
+
+/* 
+   Сделай так чтобы возвращалось значение 1000 
+*/
+func Conc4() {
+	i := 0
+	worker := func(wg *sync.WaitGroup) {
+		i = i + 1
+		wg.Done()
+	}
+
+    var wg sync.WaitGroup
+
+    for i := 0; i < 1000; i++ {
+        wg.Add(1)
+        go worker(&wg)
+    }
+
+    wg.Wait()
+
+    fmt.Println("value of i after 1000 operations is", i)
 }
