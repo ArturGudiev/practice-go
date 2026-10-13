@@ -23,6 +23,9 @@ var practiceItems = map[string]func(){
 	"ch8": concurrency.Ch8_wait_in_select_some_time_then_default, "ch8a": concurrency.Ch8_wait_in_select_some_time_then_default_answer,
 
 	"conc1": concurrency.Conc1_, "conc1a": concurrency.Conc1_answer,
+	"conc2a": concurrency.Conc2_pull_workers_answer,
+	"conc2":  concurrency.Conc2_pull_workers_answer,
+
 	"err1": concurrency.Err1, "err1a": concurrency.Err1_answer,
 }
 
