@@ -90,7 +90,7 @@ func Conc3_with_wg_answer() {
 		i := 0
 		for result := range results {
 			fmt.Println("[main] Result", i, ":", result)
-			i++;
+			i++
 		}
 	}()
 
@@ -103,9 +103,8 @@ func Conc3_with_wg_answer() {
 	fmt.Println("[main] main() stopped")
 }
 
-
 func Conc4_answer() {
-	
+
 	i := 0
 	worker := func(wg *sync.WaitGroup, m *sync.Mutex) {
 		m.Lock()
@@ -114,17 +113,17 @@ func Conc4_answer() {
 		wg.Done()
 	}
 
-    var wg sync.WaitGroup
+	var wg sync.WaitGroup
 	var m sync.Mutex
 
-    for i := 0; i < 1000; i++ {
-        wg.Add(1)
-        go worker(&wg, &m)
-    }
+	for i := 0; i < 1000; i++ {
+		wg.Add(1)
+		go worker(&wg, &m)
+	}
 
-    wg.Wait()
+	wg.Wait()
 
-    fmt.Println("value of i after 1000 operations is", i)
+	fmt.Println("value of i after 1000 operations is", i)
 }
 
 func Conc5_fib_answer() {
@@ -141,7 +140,72 @@ func Conc5_fib_answer() {
 		return c
 	}
 
-    for fn := range fib(10) {
-        fmt.Println("Current fibonacci number is", fn)
-    }
+	for fn := range fib(10) {
+		fmt.Println("Current fibonacci number is", fn)
+	}
+}
+
+func Conc6_fan_in_answer() {
+
+	getInputChan := func() <-chan int {
+		input := make(chan int, 100)
+		numbers := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+		go func() {
+			for num := range numbers {
+				input <- num
+			}
+			close(input)
+		}()
+		return input
+	}
+
+	getSquareChan := func(input <-chan int) <-chan int {
+		output := make(chan int, 100)
+
+		go func() {
+			for num := range input {
+				output <- num * num
+			}
+
+			close(output)
+		}()
+		return output
+	}
+
+	merge := func(outputsChan ...<-chan int) <-chan int {
+		var wg sync.WaitGroup
+		merged := make(chan int, 100)
+		wg.Add(len(outputsChan))
+
+		output := func(sc <-chan int) {
+			for sqr := range sc {
+				merged <- sqr
+			}
+			wg.Done()
+		}
+
+		for _, optChan := range outputsChan {
+			go output(optChan)
+		}
+
+		go func() {
+			wg.Wait()
+			close(merged)
+		}()
+		return merged
+	}
+
+	chanInputNums := getInputChan()
+	chanOptSqr1 := getSquareChan(chanInputNums)
+	chanOptSqr2 := getSquareChan(chanInputNums)
+
+	chanMergedSqr := merge(chanOptSqr1, chanOptSqr2)
+	sqrSum := 0
+
+	for num := range chanMergedSqr {
+		sqrSum += num
+	}
+
+	fmt.Println("Sum of squares between 0-9 is", sqrSum)
 }

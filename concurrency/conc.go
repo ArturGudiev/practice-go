@@ -137,3 +137,53 @@ func Conc5_fib() {
     //     fmt.Println("Current fibonacci number is", fn)
     // }
 }
+
+/*
+  Смержить выходные каналы в один канал
+*/ 
+func Conc6_fan_in() {
+
+	getInputChan := func() <-chan int {
+		input := make(chan int, 100)
+		numbers := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+		go func() {
+			for num := range numbers {
+				input <- num
+			}
+			close(input)
+		}()
+		return input
+	}
+
+	getSquareChan := func(input <-chan int) <-chan int {
+		output := make(chan int, 100)
+
+		go func() {
+			for num := range input {
+				output <- num * num
+			}
+
+			close(output)
+		}()
+		return output
+	}
+
+	merge := func(outputsChan ...<-chan int) <-chan int {
+		merged := make(chan int, 100)
+		return merged
+	}
+
+	chanInputNums := getInputChan()
+	chanOptSqr1 := getSquareChan(chanInputNums)
+	chanOptSqr2 := getSquareChan(chanInputNums)
+
+	chanMergedSqr := merge(chanOptSqr1, chanOptSqr2)
+	sqrSum := 0
+
+	for num := range chanMergedSqr {
+		sqrSum += num
+	}
+
+	fmt.Println("Sum of squares between 0-9 is", sqrSum)
+}
